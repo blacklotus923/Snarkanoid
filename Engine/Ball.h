@@ -12,6 +12,8 @@ public:
 	void Draw(Graphics& _gfx) const;
 	void Update(float dt);
 	bool DoWallCollision(const RectF& _walls);
+	void ReboundX();
+	void ReboundY();
 	RectF& GetRekt() const;
 
 private:
