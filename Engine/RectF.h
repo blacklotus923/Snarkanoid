@@ -1,9 +1,20 @@
 #pragma once
+#include "Vec2.h"
+
 class RectF
 {
 public:
-	RectF();
-	~RectF();
+	RectF() = default;
+	RectF(float _left, float _right, float _bottom, float _top);
+	RectF(const Vec2& _topleft, const Vec2& _bottomright);
+	RectF(const Vec2& _topleft, float _width, float _height);
+	static RectF& FromCenter(const Vec2& _center, float _halfWidth, float _halfHeight);
+	bool IsOverlappingWith(const RectF& _rect) const;
+public:
+	float left;
+	float right;
+	float bottom;
+	float top;
 };
 
 
