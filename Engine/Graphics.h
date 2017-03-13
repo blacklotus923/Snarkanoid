@@ -22,6 +22,7 @@
 #include <d3d11.h>
 #include <wrl.h>
 #include "ChiliException.h"
+#include "RectF.h"
 #include "Colors.h"
 
 class Graphics
@@ -57,6 +58,10 @@ public:
 	}
 	void PutPixel( int x,int y,Color c );
 	void DrawRect( int x0,int y0,int x1,int y1,Color c );
+	void DrawRect(const RectF& _rect, Color c)
+	{
+		DrawRect(_rect.top, _rect.left, _rect.bottom, _rect.right, c);
+	};
 	void DrawCircle( int x,int y,int radius,Color c );
 	~Graphics();
 private:
