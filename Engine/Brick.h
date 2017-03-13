@@ -8,13 +8,13 @@ class Brick
 {
 public:
 	Brick() = default;
-	Brick(RectF& _rekt, Color c);
+	Brick(const RectF& _rekt, Color c);
 	void Draw(Graphics& _gfx) const;
 	bool DoBallCollision(Ball& _ball);
 
 private:
 	RectF rekt;
 	Color c;
-	bool isDestroyed = true;
+	bool isDestroyed = false;
 };
 

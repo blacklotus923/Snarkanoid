@@ -1,6 +1,6 @@
 #include "Brick.h"
 
-Brick::Brick(RectF & _rekt, Color c)
+Brick::Brick(const RectF & _rekt, Color c)
 	:
 	rekt(_rekt),
 	c(c)
