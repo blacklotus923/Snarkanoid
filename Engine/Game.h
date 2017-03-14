@@ -23,9 +23,10 @@
 #include "Keyboard.h"
 #include "Mouse.h"
 #include "Graphics.h"
+#include "FrameTimer.h"
 #include "Ball.h"
 #include "Brick.h"
-#include "FrameTimer.h"
+#include "Paddle.h"
 
 class Game
 {
@@ -49,5 +50,6 @@ private:
 	FrameTimer ft;
 	Brick brick;
 	RectF walls;
+	Paddle paddle;
 	/********************************/
 };
