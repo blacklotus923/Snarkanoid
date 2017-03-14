@@ -9,7 +9,7 @@ Brick::Brick(const RectF & _rekt, Color c)
 
 void Brick::Draw(Graphics & _gfx) const
 {
-	if (!isDestroyed) _gfx.DrawRect(rekt, c);
+	if (!isDestroyed) _gfx.DrawRect(rekt.GetExpanded(-padX,-padY), c);
 }
 
 bool Brick::DoBallCollision(Ball & _ball)

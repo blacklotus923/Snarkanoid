@@ -15,6 +15,8 @@ public:
 private:
 	RectF rekt;
 	Color c;
+	float padX = 1.0f;
+	float padY = 1.0f;
 	bool isDestroyed = false;
 };
 
