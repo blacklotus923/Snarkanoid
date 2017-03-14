@@ -47,9 +47,16 @@ private:
 	Graphics gfx;
 	/********************************/
 	/*  User Variables              */
+	static constexpr float bWidth = 46.0f;
+	static constexpr float bHeight = 20.0f;
+	static constexpr float offsetX = 10.0f;
+	static constexpr float offsetY = 25.0f;
+	static constexpr int gridWidth = 10;
+	static constexpr int gridHeight = 4;
+	static constexpr Color colors[6] = {Colors::Magenta, Colors::Cyan, Colors::LightGray, Colors::Red, Colors::Blue, Colors::Green};
+	Brick bricks[gridHeight * gridWidth];
 	Ball ball;
 	FrameTimer ft;
-	Brick brick;
 	RectF walls;
 	Paddle paddle;
 	Sound paddleSound;

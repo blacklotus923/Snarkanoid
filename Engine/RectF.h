@@ -22,23 +22,7 @@ public:
 
 
 //TODO
-//object types :
 
-//Paddle(halfwith, halfheight dims)
-//
-//behaviors :
-//	Draw,
-
-
-//	paddle needs function to getRect
-
-//	play sound when bouncing off wall, paddle
-//	paddle needs doballcollision, then rebound ball
-//	paddle needs dowallcollision(or just include in draw ? )
-//
-//	rect needs added getexpanded function that returns a rect with padding(used to put padding between bricks)
-//
-//
 //	notes:
 
 //

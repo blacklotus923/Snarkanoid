@@ -27,11 +27,17 @@ Game::Game(MainWindow& wnd)
 	gfx(wnd),
 	walls(0.0f, (float)Graphics::ScreenWidth, (float)Graphics::ScreenHeight, 0.0f),
 	ball(Vec2(400.0f,300.0f), Vec2(200.0f,200.0f)),
-	brick(RectF(Vec2(100.0f,100.0f),60.0f,25.0f), Colors::Red),
 	paddle(Vec2((float)Graphics::ScreenWidth/2,(float) Graphics::ScreenHeight-75),45.0f,10.0f),
 	paddleSound(L"Sounds\\arkpad.wav"),
 	brickSound(L"Sounds\\arkbrick.wav")
 {
+	for (Brick& b : bricks)
+	{
+		int x = (&b - &bricks[0]) % gridWidth;  //I'm sorry but this is fucking awesome.
+		int y = (&b - &bricks[0]) / gridWidth;  //subtract reference addresses to get the index of the current reference in the array WHAT?!
+		b=Brick(RectF(Vec2(x*bWidth+offsetX, y*bHeight+offsetY), bWidth, bHeight), colors[y%6]);
+	}
+
 }
 
 void Game::Go()
@@ -47,14 +53,20 @@ void Game::UpdateModel()
 	const float dt = ft.Mark();
 	ball.Update(dt);
 	ball.DoWallCollision(walls);
-	if(brick.DoBallCollision(ball)) brickSound.Play();
+	for (Brick& b : bricks)
+	{
+		if (b.DoBallCollision(ball)) brickSound.Play();
+	}
 	if(paddle.DoBallCollision(ball)) paddleSound.Play();
 	paddle.Update(wnd.kbd, dt, walls);
 }
 
 void Game::ComposeFrame()
 {
+	for (Brick& b : bricks)
+	{
+		b.Draw(gfx);
+	}
 	ball.Draw(gfx);
-	brick.Draw(gfx);
 	paddle.Draw(gfx);
 }
