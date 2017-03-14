@@ -35,3 +35,8 @@ bool RectF::IsOverlappingWith(const RectF & _rect) const
 		&& top < _rect.bottom
 		&& bottom > _rect.top;
 }
+
+RectF RectF::GetExpanded(float _xpad, float _ypad) const
+{
+	return RectF{ left - _xpad, right + _xpad, bottom + _ypad, top - _ypad };
+}
