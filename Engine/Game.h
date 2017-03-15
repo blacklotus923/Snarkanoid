@@ -53,7 +53,7 @@ private:
 	static constexpr int gridHeight = 9;
 	static constexpr float offsetX = (Graphics::ScreenWidth - (bWidth*gridWidth)) / 2;
 	static constexpr float offsetY = 25.0f;
-	static constexpr Color colors[6] = {Colors::Magenta, Colors::Cyan, Colors::LightGray, Colors::Red, Colors::Blue, Colors::Green};
+	Color colors[6] = {Color(116,133,38), Color(120,31,22), Color(6,34,69), Color(26,103,196), Color(196,33,17), Color(172,172,172) };
 	Brick bricks[gridHeight * gridWidth];
 	Ball ball;
 	FrameTimer ft;

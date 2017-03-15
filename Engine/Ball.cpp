@@ -68,3 +68,8 @@ Vec2 Ball::GetVel() const
 {
 	return vel;
 }
+
+void Ball::Move(const Vec2 & _vec)
+{
+	pos += _vec;
+}

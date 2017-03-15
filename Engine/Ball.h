@@ -16,6 +16,7 @@ public:
 	void ReboundY();
 	RectF GetRekt() const;
 	Vec2 GetVel() const;
+	void Move(const Vec2& _vec);
 
 private:
 	static constexpr float radius = 7.0f;
