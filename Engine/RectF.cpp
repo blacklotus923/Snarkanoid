@@ -40,3 +40,8 @@ RectF RectF::GetExpanded(float _xpad, float _ypad) const
 {
 	return RectF{ left - _xpad, right + _xpad, bottom + _ypad, top - _ypad };
 }
+
+Vec2 RectF::GetCenter() const
+{
+	return Vec2((right-left)/2,(bottom-top)/2);
+}
