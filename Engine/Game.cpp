@@ -20,6 +20,7 @@
  ******************************************************************************************/
 #include "MainWindow.h"
 #include "Game.h"
+#undef min
 
 Game::Game(MainWindow& wnd)
 	:
@@ -42,15 +43,20 @@ Game::Game(MainWindow& wnd)
 
 void Game::Go()
 {
-	gfx.BeginFrame();	
-	UpdateModel();
+	gfx.BeginFrame();
+	float elapsedTime = ft.Mark();
+	while (elapsedTime > 0.0f) //consume small chunks of time until frametime is consumed (then consume the tiny last bite) and run physics
+	{
+		const float dt = std::min(0.0025f, elapsedTime);
+		UpdateModel(dt);
+		elapsedTime -= dt;
+	}
 	ComposeFrame();
 	gfx.EndFrame();
 }
 
-void Game::UpdateModel()
+void Game::UpdateModel(float dt)
 {
-	const float dt = ft.Mark();
 	float leastColDistSq = 1000000.0f;
 	int indexOfCollision;
 	bool collided = false;
