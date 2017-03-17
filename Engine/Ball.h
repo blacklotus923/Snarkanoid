@@ -14,6 +14,7 @@ public:
 	bool DoWallCollision(const RectF& _walls);
 	void ReboundX();
 	void ReboundY();
+	void AdjustVel(const Vec2& _delta);
 	RectF GetRekt() const;
 	Vec2 GetVel() const;
 	void Move(const Vec2& _vec);

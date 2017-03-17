@@ -10,7 +10,9 @@ public:
 	Brick() = default;
 	Brick(const RectF& _rekt, Color c);
 	void Draw(Graphics& _gfx) const;
-	bool DoBallCollision(Ball& _ball);
+	bool CheckBallCollision(const Ball& _ball) const;
+	void DoBallCollision(Ball& _ball);
+	RectF GetRekt() const;
 
 private:
 	RectF rekt;

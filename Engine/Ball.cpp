@@ -59,6 +59,11 @@ void Ball::ReboundY()
 	vel.y = -vel.y;
 }
 
+void Ball::AdjustVel(const Vec2 & _delta)
+{
+	vel += _delta;
+}
+
 RectF Ball::GetRekt() const
 {
 	return RectF::FromCenter(pos, radius, radius);

@@ -31,9 +31,43 @@ void Paddle::DoWallCollision(const RectF& _walls)
 
 bool Paddle::DoBallCollision(Ball & _ball) const
 {
-	if (_ball.GetVel().y > 0 && GetRekt().IsOverlappingWith(_ball.GetRekt()))
+	using std::min;
+	const RectF rekt = GetRekt();
+	const RectF ballRekt = _ball.GetRekt();
+	if (rekt.IsOverlappingWith(ballRekt))
 	{
-		_ball.ReboundY();
+		const float lDelta = abs(rekt.left - ballRekt.right);
+		const float rDelta = abs(rekt.right - ballRekt.left);
+		const float tDelta = abs(rekt.top - ballRekt.bottom);
+		const float bDelta = abs(rekt.bottom - ballRekt.top);
+		const float smallest = min(lDelta, min(rDelta, min(tDelta, bDelta)));
+		const float c2c = ballRekt.GetCenter().x - rekt.GetCenter().x;
+
+		if (smallest == lDelta)  //leftside
+		{
+			_ball.ReboundX();
+			_ball.ReboundY();
+			_ball.Move(Vec2(rekt.left - ballRekt.right, 0.0f));
+			_ball.AdjustVel(Vec2(c2c, 0.0f));
+		}
+		else if (smallest == rDelta)  //rightside
+		{
+			_ball.ReboundX();
+			_ball.ReboundY();
+			_ball.Move(Vec2(rekt.right - ballRekt.left, 0.0f));
+			_ball.AdjustVel(Vec2(c2c, 0.0f));
+		}
+		if (smallest == tDelta)  //topside
+		{
+			_ball.ReboundY();
+			_ball.Move(Vec2(0.0f, rekt.top - ballRekt.bottom));
+			_ball.AdjustVel(Vec2(c2c, 0.0f));
+		}
+		else if (smallest == bDelta)  //bottomside
+		{
+			_ball.ReboundY();
+			_ball.Move(Vec2(0.0f, rekt.bottom - ballRekt.top));
+		}
 		return true;
 	}
 	return false;

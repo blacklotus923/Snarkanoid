@@ -22,7 +22,7 @@ RectF::RectF(const Vec2 & _topleft, float _width, float _height)
 {
 }
 
-RectF& RectF::FromCenter(const Vec2 & _center, float _halfWidth, float _halfHeight)
+RectF RectF::FromCenter(const Vec2 & _center, float _halfWidth, float _halfHeight)
 {
 	const Vec2 h = {_halfWidth, _halfHeight};
 	return RectF(_center-h, _center+h);
