@@ -4,15 +4,17 @@
 #include "Ball.h"
 #include "Graphics.h"
 #include "Keyboard.h"
+#include "Mouse.h"
 
 class Paddle
 {
 public:
 	Paddle(Vec2& _pos, float _halfW, float _halfH);
 	void Draw(Graphics& gfx) const;
-	void Update(const Keyboard& kbd, float dt, const RectF& _walls);
+	void Update(const Keyboard& kbd, const Mouse& mouse, float dt, const RectF& _walls);
 	void DoWallCollision(const RectF& _walls);
-	bool DoBallCollision(Ball& _ball) const;
+	bool DoBallCollision(Ball& _ball);
+	void ResetCooldown();
 	RectF GetRekt() const;
 
 private:
@@ -23,5 +25,6 @@ private:
 	float halfWidth;
 	float halfHeight;
 	float speed = 250.0f;
+	bool inCooldown = false;
 };
 

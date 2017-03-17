@@ -1,4 +1,5 @@
 #include "Paddle.h"
+#undef min
 
 Paddle::Paddle(Vec2 & _pos, float _halfW, float _halfH)
 	:
@@ -15,10 +16,12 @@ void Paddle::Draw(Graphics & gfx) const
 	gfx.DrawRect(rekt.GetExpanded(-wSize, 0.0f),c);
 }
 
-void Paddle::Update(const Keyboard& kbd, float dt, const RectF& _walls)
+void Paddle::Update(const Keyboard& kbd, const Mouse& mouse, float dt, const RectF& _walls)
 {
+	Vec2 mspos = Vec2((float)mouse.GetPosX(), (float)mouse.GetPosY());
 	if (kbd.KeyIsPressed(VK_LEFT) || kbd.KeyIsPressed('A')) pos.x -= speed * dt;
 	if (kbd.KeyIsPressed(VK_RIGHT) || kbd.KeyIsPressed('D')) pos.x += speed * dt;
+	if (mspos.x > 0.0f && mspos.x < Graphics::ScreenWidth) pos.x = mspos.x;
 	DoWallCollision(_walls);
 }
 
@@ -29,48 +32,31 @@ void Paddle::DoWallCollision(const RectF& _walls)
 	else if (rekt.right > _walls.right) pos.x -= rekt.right - _walls.right;
 }
 
-bool Paddle::DoBallCollision(Ball & _ball) const
+bool Paddle::DoBallCollision(Ball & _ball)
 {
-	using std::min;
 	const RectF rekt = GetRekt();
 	const RectF ballRekt = _ball.GetRekt();
-	if (rekt.IsOverlappingWith(ballRekt))
+	if (!inCooldown && rekt.IsOverlappingWith(ballRekt))
 	{
-		const float lDelta = abs(rekt.left - ballRekt.right);
-		const float rDelta = abs(rekt.right - ballRekt.left);
-		const float tDelta = abs(rekt.top - ballRekt.bottom);
-		const float bDelta = abs(rekt.bottom - ballRekt.top);
-		const float smallest = min(lDelta, min(rDelta, min(tDelta, bDelta)));
-		const float c2c = ballRekt.GetCenter().x - rekt.GetCenter().x;
-
-		if (smallest == lDelta)  //leftside
-		{
-			_ball.ReboundX();
-			_ball.ReboundY();
-			_ball.Move(Vec2(rekt.left - ballRekt.right, 0.0f));
-			_ball.AdjustVel(Vec2(c2c, 0.0f));
-		}
-		else if (smallest == rDelta)  //rightside
-		{
-			_ball.ReboundX();
-			_ball.ReboundY();
-			_ball.Move(Vec2(rekt.right - ballRekt.left, 0.0f));
-			_ball.AdjustVel(Vec2(c2c, 0.0f));
-		}
-		if (smallest == tDelta)  //topside
+		Vec2 ballPos = ballRekt.GetCenter();
+		if (std::signbit(_ball.GetVel().x) == std::signbit((ballPos - rekt.GetCenter()).x))
 		{
 			_ball.ReboundY();
-			_ball.Move(Vec2(0.0f, rekt.top - ballRekt.bottom));
-			_ball.AdjustVel(Vec2(c2c, 0.0f));
 		}
-		else if (smallest == bDelta)  //bottomside
+		else if(ballPos.x >= rekt.left && ballPos.x <= rekt.right)
 		{
 			_ball.ReboundY();
-			_ball.Move(Vec2(0.0f, rekt.bottom - ballRekt.top));
 		}
+		else _ball.ReboundX();		
+		inCooldown = true;
 		return true;
 	}
 	return false;
+}
+
+void Paddle::ResetCooldown()
+{
+	inCooldown = false;
 }
 
 RectF Paddle::GetRekt() const
