@@ -62,3 +62,11 @@ Vec2 Vec2::GetNormalized() const
 	}
 	return *this;
 }
+
+Vec2 Vec2::GetRotated(const float _angle) const
+{
+	float theta = _angle*0.01745329252f;
+	float cs = std::cos(theta);
+	float sn = std::sin(theta);
+	return Vec2((x*cs - y*sn),(x*sn + y*cs));
+}

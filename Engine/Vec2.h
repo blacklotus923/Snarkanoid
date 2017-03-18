@@ -15,6 +15,7 @@ public:
 	float GetLengthSq() const;
 	Vec2& Normalize();
 	Vec2 GetNormalized() const;
+	Vec2 GetRotated(const float _angle) const;
 public:
 	float x;
 	float y;
