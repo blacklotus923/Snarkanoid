@@ -15,6 +15,7 @@ public:
 	void ReboundX();
 	void ReboundY();
 	void AdjustVel(const Vec2& _delta);
+	void SetVelocity(const Vec2& _vel);
 	RectF GetRekt() const;
 	Vec2 GetVel() const;
 	void Move(const Vec2& _vec);
@@ -23,5 +24,6 @@ private:
 	static constexpr float radius = 7.0f;
 	Vec2 pos;
 	Vec2 vel;
+	float speed = 200.0f;
 };
 

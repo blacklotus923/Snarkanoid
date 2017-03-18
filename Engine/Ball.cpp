@@ -64,6 +64,11 @@ void Ball::AdjustVel(const Vec2 & _delta)
 	vel += _delta;
 }
 
+void Ball::SetVelocity(const Vec2 & _vel)
+{
+	vel = _vel.GetNormalized()*speed;
+}
+
 RectF Ball::GetRekt() const
 {
 	return RectF::FromCenter(pos, radius, radius);
