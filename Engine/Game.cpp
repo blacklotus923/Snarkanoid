@@ -27,7 +27,7 @@ Game::Game(MainWindow& wnd)
 	wnd(wnd),
 	gfx(wnd),
 	walls(0.0f, (float)Graphics::ScreenWidth, (float)Graphics::ScreenHeight, 0.0f),
-	ball(Vec2(402.5f,300.0f), Vec2(-200.0f,-200.0f)),
+	ball(Vec2(402.5f,300.0f), Vec2(0.0f,-200.0f)),
 	paddle(Vec2((float)Graphics::ScreenWidth/2,(float) Graphics::ScreenHeight-75),45.0f,10.0f),
 	paddleSound(L"Sounds\\arkpad.wav"),
 	brickSound(L"Sounds\\arkbrick.wav")
@@ -57,43 +57,73 @@ void Game::Go()
 
 void Game::UpdateModel(float dt)
 {
-	float leastColDistSq = 1000000.0f;
-	int indexOfCollision;
-	bool collided = false;
-
-	ball.Update(dt);
-	if(ball.DoWallCollision(walls)) paddle.ResetCooldown();
-
-	for (Brick& b : bricks)
+	if (!isStarted || isGameOver)
 	{
-		if (b.CheckBallCollision(ball))
+		if (wnd.kbd.KeyIsPressed(VK_RETURN))
 		{
-			float collisionDist = (b.GetRekt().GetCenter() - ball.GetRekt().GetCenter()).GetLengthSq();
-			if (collisionDist < leastColDistSq)
-			{
-				leastColDistSq = collisionDist;
-				indexOfCollision = (int)(&b - &bricks[0]);
-			}
-			collided = true;
+			isStarted = true;
+			isGameOver = false;
 		}
 	}
-	if (collided)
+	else if (!isGameOver && isStarted)
 	{
-		paddle.ResetCooldown();
-		bricks[indexOfCollision].DoBallCollision(ball);
-		brickSound.Play();
-	}
+		float leastColDistSq = 1000000.0f;
+		int indexOfCollision;
+		bool collided = false;
 
-	if(paddle.DoBallCollision(ball)) paddleSound.Play();
-	paddle.Update(wnd.kbd, wnd.mouse, dt, walls);
+		ball.Update(dt);
+		if (ball.GetRekt().bottom >= walls.bottom)
+		{
+			isGameOver = true;
+			ball.ReboundY;
+			ball.Move(Vec2(ball.GetRekt().bottom - walls.bottom, 0.0f));
+		}
+		else if (ball.DoWallCollision(walls)) paddle.ResetCooldown();
+
+		for (Brick& b : bricks)
+		{
+			if (b.CheckBallCollision(ball))
+			{
+				float collisionDist = (b.GetRekt().GetCenter() - ball.GetRekt().GetCenter()).GetLengthSq();
+				if (collisionDist < leastColDistSq)
+				{
+					leastColDistSq = collisionDist;
+					indexOfCollision = (int)(&b - &bricks[0]);
+				}
+				collided = true;
+			}
+		}
+		if (collided)
+		{
+			paddle.ResetCooldown();
+			bricks[indexOfCollision].DoBallCollision(ball);
+			brickSound.Play();
+		}
+
+		if (paddle.DoBallCollision(ball)) paddleSound.Play();
+		paddle.Update(wnd.kbd, wnd.mouse, dt, walls);
+	}
 }
 
 void Game::ComposeFrame()
 {
-	for (Brick& b : bricks)
+	if (!isStarted)
 	{
-		b.Draw(gfx);
+		SpriteCodex::DrawTitle(Vec2((float)gfx.ScreenWidth / 2.0f, (float)gfx.ScreenHeight / 2.0f), gfx);
+		SpriteCodex::DrawHitEnter(Vec2((float)gfx.ScreenWidth / 2.0f, ((float)gfx.ScreenHeight / 2.0f)+53.0f), gfx);
 	}
-	ball.Draw(gfx);
-	paddle.Draw(gfx);
+	else if (isGameOver)
+	{
+		SpriteCodex::DrawGameOver(Vec2((float)gfx.ScreenWidth / 2.0f, (float)gfx.ScreenHeight / 2.0f), gfx);
+		SpriteCodex::DrawHitEnter(Vec2((float)gfx.ScreenWidth / 2.0f, ((float)gfx.ScreenHeight / 2.0f) + 62.0f), gfx);
+	}
+	else
+	{
+		for (Brick& b : bricks)
+		{
+			b.Draw(gfx);
+		}
+		ball.Draw(gfx);
+		paddle.Draw(gfx);
+	}
 }
