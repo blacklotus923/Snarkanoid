@@ -16,12 +16,16 @@ public:
 	bool DoBallCollision(Ball& _ball);
 	void ResetCooldown();
 	RectF GetRekt() const;
+private:
+	void DrawLeftWing(Graphics& gfx) const;
+	void DrawMiddle(Graphics& gfx) const;
+	void DrawRightWing(Graphics& gfx) const;
 
 private:
 	Color c = Colors::White;
 	Color wCol = Colors::Red;
 	Vec2 pos;
-	float wSize = 15.0f;
+	float wSize = 16.0f;
 	float halfWidth;
 	float halfHeight;
 	float speed = 250.0f;
