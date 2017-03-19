@@ -26,9 +26,9 @@ Game::Game(MainWindow& wnd)
 	:
 	wnd(wnd),
 	gfx(wnd),
-	walls(0.0f, (float)Graphics::ScreenWidth, (float)Graphics::ScreenHeight, 0.0f),
+	walls(fieldOffset, fieldWidth+fieldOffset, (float)Graphics::ScreenHeight, 0.0f),
 	ball(Vec2(402.5f,300.0f), Vec2(0.0f,-200.0f)),
-	paddle(Vec2((float)Graphics::ScreenWidth/2,(float) Graphics::ScreenHeight-75),45.0f,10.0f),
+	paddle(Vec2((float)Graphics::ScreenWidth/2,(float) Graphics::ScreenHeight-75),36.0f,8.0f),
 	paddleSound(L"Sounds\\arkpad.wav"),
 	brickSound(L"Sounds\\arkbrick.wav")
 {

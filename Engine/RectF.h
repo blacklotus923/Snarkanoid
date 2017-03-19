@@ -24,19 +24,19 @@ public:
 
 //TODO
 
-//Arkanoid-like paddle bounce variation
+//Arkanoid-like paddle bounce variation _DONE
 
-//game over when ball hits bottom of screen
+//game over when ball hits bottom of screen _DONE
 
-//narrower wall layout, adjust size of bricks and paddle
+//narrower wall layout, adjust size of bricks and paddle _DONE
 
 //add pretty border to walls
 
 //add lives
 
-//proper title screen
+//proper title screen _DONE
 
-//proper game over screen
+//proper game over screen _DONE
 
 //new paddle sprite, shading on bricks
 
