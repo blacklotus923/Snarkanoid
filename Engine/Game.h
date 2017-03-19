@@ -64,6 +64,7 @@ private:
 	Sound paddleSound;
 	Sound brickSound;
 	Sound music;
+	Sound gameOverSound;
 	bool musicIsPlaying = false;
 	bool isGameOver = false;
 	bool isStarted = false;

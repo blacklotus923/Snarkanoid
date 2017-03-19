@@ -29,8 +29,9 @@ Game::Game(MainWindow& wnd)
 	walls(fieldOffset, fieldWidth+fieldOffset, (float)Graphics::ScreenHeight, 0.0f),
 	ball(Vec2(402.5f,300.0f), Vec2(0.0f,200.0f)),
 	paddle(Vec2((float)Graphics::ScreenWidth/2,(float) Graphics::ScreenHeight-75),44.0f,8.0f),
-	paddleSound(L"Sounds\\arkpad.wav"),
-	brickSound(L"Sounds\\arkbrick.wav"),
+	paddleSound(L"Sounds\\pad2.wav"),
+	brickSound(L"Sounds\\brick2.wav"),
+	gameOverSound(L"Sounds\\gameover.wav"),
 	music(L"Sounds\\bgmusic.wav",0.01f,108.12f)
 {
 	for (Brick& b : bricks)
@@ -60,16 +61,24 @@ void Game::UpdateModel(float dt)
 {
 	if (!isStarted || isGameOver)
 	{
+		if (musicIsPlaying)
+		{
+			music.StopAll();
+			musicIsPlaying = false;
+		}
 		if (wnd.kbd.KeyIsPressed(VK_RETURN))
 		{
 			isStarted = true;
 			isGameOver = false;
-			music.Play();
-			musicIsPlaying = true;
 		}
 	}
 	else if (!isGameOver && isStarted)
 	{
+		if (!musicIsPlaying)
+		{
+			music.Play();
+			musicIsPlaying = true;
+		}
 		float leastColDistSq = 1000000.0f;
 		int indexOfCollision;
 		bool collided = false;
@@ -80,6 +89,7 @@ void Game::UpdateModel(float dt)
 			isGameOver = true;
 			ball.ReboundY();
 			ball.Move(Vec2(ball.GetRekt().bottom - walls.bottom, 0.0f));
+			gameOverSound.Play();
 		}
 		else if (ball.DoWallCollision(walls)) paddle.ResetCooldown();
 
