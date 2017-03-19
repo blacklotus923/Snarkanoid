@@ -27,10 +27,11 @@ Game::Game(MainWindow& wnd)
 	wnd(wnd),
 	gfx(wnd),
 	walls(fieldOffset, fieldWidth+fieldOffset, (float)Graphics::ScreenHeight, 0.0f),
-	ball(Vec2(402.5f,300.0f), Vec2(0.0f,-200.0f)),
+	ball(Vec2(402.5f,300.0f), Vec2(0.0f,200.0f)),
 	paddle(Vec2((float)Graphics::ScreenWidth/2,(float) Graphics::ScreenHeight-75),44.0f,8.0f),
 	paddleSound(L"Sounds\\arkpad.wav"),
-	brickSound(L"Sounds\\arkbrick.wav")
+	brickSound(L"Sounds\\arkbrick.wav"),
+	music(L"Sounds\\bgmusic.wav",0.01f,108.12f)
 {
 	for (Brick& b : bricks)
 	{
@@ -63,6 +64,8 @@ void Game::UpdateModel(float dt)
 		{
 			isStarted = true;
 			isGameOver = false;
+			music.Play();
+			musicIsPlaying = true;
 		}
 	}
 	else if (!isGameOver && isStarted)

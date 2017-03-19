@@ -38,7 +38,7 @@ public:
 
 //proper game over screen _DONE
 
-//new paddle sprite, shading on bricks
+//new paddle sprite DONE, shading on bricks
 
 //more than one brick type
 
