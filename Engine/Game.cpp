@@ -75,7 +75,7 @@ void Game::UpdateModel(float dt)
 		if (ball.GetRekt().bottom >= walls.bottom)
 		{
 			isGameOver = true;
-			ball.ReboundY;
+			ball.ReboundY();
 			ball.Move(Vec2(ball.GetRekt().bottom - walls.bottom, 0.0f));
 		}
 		else if (ball.DoWallCollision(walls)) paddle.ResetCooldown();

@@ -40,19 +40,17 @@ bool Paddle::DoBallCollision(Ball & _ball)
 	if (!inCooldown && rekt.IsOverlappingWith(ballRekt) && ballSpeed.y > 0.0f)
 	{
 		Vec2 ballPos = ballRekt.GetCenter();
-		Vec2 c2c = ballPos - rekt.GetCenter();
-		Vec2 ballVelNorm = ballSpeed.GetNormalized();
-		ballVelNorm.y = -ballVelNorm.y;
-		Vec2 newDirNormal = (ballVelNorm + (c2c).GetNormalized()).GetNormalized();
+		float angle = (ballPos.x - rekt.left) / (halfWidth * 2.0f);
+		float theta = -45 * (1 - angle) + 45 * angle;
 		if (std::signbit(_ball.GetVel().x) == std::signbit((ballPos - rekt.GetCenter()).x))
 		{
-			_ball.Move(Vec2(0.0f, rekt.top - ballRekt.bottom));
-			_ball.SetVelocity(newDirNormal);
+			_ball.ReboundY();
+			_ball.SetVelocity(_ball.GetVel().GetRotated(theta));
 		}
 		else if(ballPos.x >= rekt.left && ballPos.x <= rekt.right)
 		{
-			_ball.Move(Vec2(0.0f, rekt.top - ballRekt.bottom));
-			_ball.SetVelocity(newDirNormal);
+			_ball.ReboundY();
+			_ball.SetVelocity(_ball.GetVel().GetRotated(theta));
 		}
 		else _ball.ReboundX();		
 		inCooldown = true;
