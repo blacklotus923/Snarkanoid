@@ -24,8 +24,24 @@ public:
 
 //TODO
 
-//	notes:
+//Arkanoid-like paddle bounce variation
 
-//
-//Add "Cooldown" to paddle such that ball can only hit paddle once until it's hit a wall or brick again
-//Add "closest collision" logic to bricks, such that game.cpp only executes collision on one brick per collision
+//game over when ball hits bottom of screen
+
+//narrower wall layout, adjust size of bricks and paddle
+
+//add pretty border to walls
+
+//add lives
+
+//proper title screen
+
+//proper game over screen
+
+//new paddle sprite, shading on bricks
+
+//more than one brick type
+
+//win when all bricks gone
+
+//multiple levels
