@@ -17,8 +17,11 @@ public:
 private:
 	RectF rekt;
 	Color c;
+	Color highlight;
+	Color lowlight;
 	float padX = 1.0f;
 	float padY = 1.0f;
+	float depth = 3.0f;
 	bool isDestroyed = false;
 };
 

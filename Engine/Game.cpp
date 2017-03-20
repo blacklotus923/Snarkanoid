@@ -27,7 +27,7 @@ Game::Game(MainWindow& wnd)
 	wnd(wnd),
 	gfx(wnd),
 	walls(fieldOffset, fieldWidth+fieldOffset, (float)Graphics::ScreenHeight, 0.0f),
-	ball(Vec2(402.5f,300.0f), Vec2(0.0f,200.0f)),
+	ball(Vec2(402.5f,300.0f), Vec2(0.0f,0.0f)),
 	paddle(Vec2((float)Graphics::ScreenWidth/2,(float) Graphics::ScreenHeight-75),44.0f,8.0f),
 	paddleSound(L"Sounds\\pad2.wav"),
 	brickSound(L"Sounds\\brick2.wav"),

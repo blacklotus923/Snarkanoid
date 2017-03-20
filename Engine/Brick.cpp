@@ -8,11 +8,36 @@ Brick::Brick(const RectF & _rekt, Color c)
 	rekt(_rekt),
 	c(c)
 {
+	const float r = (float)c.GetR();
+	const float g = (float)c.GetG();
+	const float b = (float)c.GetB();
+	highlight = Color((int)std::min(r*1.25f, 255.0f), (int)std::min(g*1.25f, 255.0f), (int)std::min(b*1.25f, 255.0f));
+	lowlight = Color((int)(r*0.75f), (int)(g*0.75f), (int)(b*0.75f));
 }
 
 void Brick::Draw(Graphics & _gfx) const
 {
-	if (!isDestroyed) _gfx.DrawRect(rekt.GetExpanded(-padX,-padY), c);
+	const RectF brick = rekt.GetExpanded(-padX, -padY);
+	const float width = brick.right - brick.left;
+	const float height = (brick.bottom - brick.top)-1.5f;
+	if (!isDestroyed)
+	{
+		_gfx.DrawRect(brick.GetExpanded(-depth, -depth), c);
+		for (int y = (int)brick.top; y < (int)brick.bottom; y++)
+		{
+			for (int x = (int)brick.left; x <= (int)brick.right-1.0f; x++)
+			{
+				if (x < brick.left + depth || y < brick.top + depth || x >= brick.right - depth || y >= brick.bottom - depth)
+				{
+					if ((x - brick.left) / (width / height) + (y - brick.top) < height)
+					{
+						_gfx.PutPixel(x, y, highlight);
+					}
+					else _gfx.PutPixel(x, y, lowlight);
+				}
+			}
+		}
+	}
 }
 
 bool Brick::CheckBallCollision(const Ball & _ball) const
