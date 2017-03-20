@@ -39,6 +39,7 @@ public:
 private:
 	void ComposeFrame();
 	void UpdateModel(float dt);
+	void DrawBorder();
 	/********************************/
 	/*  User Functions              */
 	/********************************/
@@ -51,10 +52,12 @@ private:
 	static constexpr float bHeight = 18.0f;
 	static constexpr int gridWidth = 13;
 	static constexpr int gridHeight = 10;
+	static constexpr float border = 4.0f;
 	static constexpr float offsetX = (Graphics::ScreenWidth - (bWidth*gridWidth)) / 2.0f;
-	static constexpr float offsetY = 25.0f;
+	static constexpr float offsetY = bHeight+border;
 	static constexpr float fieldWidth = bWidth*gridWidth;
 	static constexpr float fieldOffset = (Graphics::ScreenWidth - fieldWidth) / 2.0f;
+	Color borderColor = Color(69, 69, 69);
 	Color colors[6] = {Color(116,133,38), Color(120,31,22), Color(6,34,69), Color(26,103,196), Color(196,33,17), Color(172,172,172) };
 	Brick bricks[gridHeight * gridWidth];
 	Ball ball;

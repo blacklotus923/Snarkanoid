@@ -26,13 +26,13 @@ Game::Game(MainWindow& wnd)
 	:
 	wnd(wnd),
 	gfx(wnd),
-	walls(fieldOffset, fieldWidth+fieldOffset, (float)Graphics::ScreenHeight, 0.0f),
-	ball(Vec2(402.5f,300.0f), Vec2(0.0f,0.0f)),
+	walls(fieldOffset, fieldWidth+fieldOffset, (float)Graphics::ScreenHeight, border),
+	ball(Vec2(402.5f,300.0f), Vec2(0.0f,200.0f)),
 	paddle(Vec2((float)Graphics::ScreenWidth/2,(float) Graphics::ScreenHeight-75),44.0f,8.0f),
 	paddleSound(L"Sounds\\pad2.wav"),
 	brickSound(L"Sounds\\brick2.wav"),
 	gameOverSound(L"Sounds\\gameover.wav"),
-	music(L"Sounds\\bgmusic.wav",0.01f,108.12f)
+	music(L"Sounds\\bgmusic.wav",0.11f,108.05f)
 {
 	for (Brick& b : bricks)
 	{
@@ -118,8 +118,29 @@ void Game::UpdateModel(float dt)
 	}
 }
 
+void Game::DrawBorder()
+{
+	int bx = (int)(walls.left - border-1);
+	int by = (int)(walls.top - border);
+	for (int y = by; y <= walls.bottom + border; y++)
+	{
+		for (int x = bx; x <= walls.right + border; x++)
+		{
+			if (x >= 0 && x < Graphics::ScreenWidth
+				&& y >= 0 && y < Graphics::ScreenHeight)
+			{
+				if (y <= walls.top || x < walls.left-1 || x > walls.right || y > walls.bottom)
+				{
+					gfx.PutPixel(x, y, borderColor);
+				}
+			}
+		}
+	}
+}
+
 void Game::ComposeFrame()
 {
+	DrawBorder();
 	if (!isStarted)
 	{
 		SpriteCodex::DrawTitle(Vec2((float)gfx.ScreenWidth / 2.0f, (float)gfx.ScreenHeight / 2.0f), gfx);

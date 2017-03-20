@@ -30,7 +30,7 @@ public:
 
 //narrower wall layout, adjust size of bricks and paddle _DONE
 
-//add pretty border to walls
+//add pretty border to walls _DONE
 
 //add lives
 
@@ -38,7 +38,7 @@ public:
 
 //proper game over screen _DONE
 
-//new paddle sprite DONE, shading on bricks
+//new paddle sprite DONE, shading on bricks DONE
 
 //more than one brick type
 
