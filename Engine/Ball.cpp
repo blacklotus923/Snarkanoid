@@ -83,3 +83,24 @@ void Ball::Move(const Vec2 & _vec)
 {
 	pos += _vec;
 }
+
+void Ball::MoveTo(const Vec2 & _vec)
+{
+	pos = _vec;
+}
+
+bool Ball::IsLaunched() const
+{
+	return isLaunched;
+}
+
+void Ball::Launch(const float _speed)
+{
+	speed = _speed;
+	isLaunched = true;
+}
+
+void Ball::Reset()
+{
+	isLaunched = false;
+}

@@ -32,7 +32,7 @@ public:
 
 //add pretty border to walls _DONE
 
-//add lives
+//add lives - _DONE
 
 //proper title screen _DONE
 

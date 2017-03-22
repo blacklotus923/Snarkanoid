@@ -36,12 +36,14 @@ public:
 	Game( const Game& ) = delete;
 	Game& operator=( const Game& ) = delete;
 	void Go();
+
+	/********************************/
+	/*  User Functions              */
 private:
 	void ComposeFrame();
 	void UpdateModel(float dt);
 	void DrawBorder();
-	/********************************/
-	/*  User Functions              */
+	void DrawLives(const Vec2& _topleft, const int _lives);
 	/********************************/
 private:
 	MainWindow& wnd;
@@ -71,5 +73,7 @@ private:
 	bool musicIsPlaying = false;
 	bool isGameOver = false;
 	bool isStarted = false;
+	int StartExtraLives = 101;
+	int curLives = 0;
 	/********************************/
 };

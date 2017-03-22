@@ -13,6 +13,7 @@ public:
 	bool CheckBallCollision(const Ball& _ball) const;
 	void DoBallCollision(Ball& _ball);
 	RectF GetRekt() const;
+	void Reset();
 
 private:
 	RectF rekt;

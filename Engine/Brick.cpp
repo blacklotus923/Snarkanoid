@@ -81,3 +81,8 @@ RectF Brick::GetRekt() const
 {
 	return rekt;
 }
+
+void Brick::Reset()
+{
+	isDestroyed = false;
+}

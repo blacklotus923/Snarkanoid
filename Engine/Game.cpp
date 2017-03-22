@@ -27,7 +27,7 @@ Game::Game(MainWindow& wnd)
 	wnd(wnd),
 	gfx(wnd),
 	walls(fieldOffset, fieldWidth+fieldOffset, (float)Graphics::ScreenHeight, border),
-	ball(Vec2(402.5f,300.0f), Vec2(0.0f,200.0f)),
+	ball(Vec2(402.5f,300.0f), Vec2(0.0f,0.0f)),
 	paddle(Vec2((float)Graphics::ScreenWidth/2,(float) Graphics::ScreenHeight-75),44.0f,8.0f),
 	paddleSound(L"Sounds\\pad2.wav"),
 	brickSound(L"Sounds\\brick2.wav"),
@@ -59,6 +59,7 @@ void Game::Go()
 
 void Game::UpdateModel(float dt)
 {
+	if (curLives < 0) isGameOver = true;
 	if (!isStarted || isGameOver)
 	{
 		if (musicIsPlaying)
@@ -68,11 +69,17 @@ void Game::UpdateModel(float dt)
 		}
 		if (wnd.kbd.KeyIsPressed(VK_RETURN))
 		{
+			for (Brick& b : bricks)
+			{
+				b.Reset();
+			}
 			isStarted = true;
 			isGameOver = false;
+			ball.Reset();
+			curLives = StartExtraLives;
 		}
 	}
-	else if (!isGameOver && isStarted)
+	else if (!isGameOver && isStarted )
 	{
 		if (!musicIsPlaying)
 		{
@@ -82,39 +89,52 @@ void Game::UpdateModel(float dt)
 		float leastColDistSq = 1000000.0f;
 		int indexOfCollision;
 		bool collided = false;
-
-		ball.Update(dt);
-		if (ball.GetRekt().bottom >= walls.bottom)
+		if (ball.IsLaunched())
 		{
-			isGameOver = true;
-			ball.ReboundY();
-			ball.Move(Vec2(ball.GetRekt().bottom - walls.bottom, 0.0f));
-			gameOverSound.Play();
-		}
-		else if (ball.DoWallCollision(walls)) paddle.ResetCooldown();
-
-		for (Brick& b : bricks)
-		{
-			if (b.CheckBallCollision(ball))
+			ball.Update(dt);
+			if (ball.GetRekt().bottom >= walls.bottom)
 			{
-				float collisionDist = (b.GetRekt().GetCenter() - ball.GetRekt().GetCenter()).GetLengthSq();
-				if (collisionDist < leastColDistSq)
+					ball.ReboundY();
+					ball.Move(Vec2(ball.GetRekt().bottom - walls.bottom, 0.0f));
+					gameOverSound.Play();
+					curLives -= 1;
+					ball.Reset();
+			}
+			else if (ball.DoWallCollision(walls)) paddle.ResetCooldown();
+
+			for (Brick& b : bricks)
+			{
+				if (b.CheckBallCollision(ball))
 				{
-					leastColDistSq = collisionDist;
-					indexOfCollision = (int)(&b - &bricks[0]);
+					float collisionDist = (b.GetRekt().GetCenter() - ball.GetRekt().GetCenter()).GetLengthSq();
+					if (collisionDist < leastColDistSq)
+					{
+						leastColDistSq = collisionDist;
+						indexOfCollision = (int)(&b - &bricks[0]);
+					}
+					collided = true;
 				}
-				collided = true;
+			}
+			if (collided)
+			{
+				paddle.ResetCooldown();
+				bricks[indexOfCollision].DoBallCollision(ball);
+				brickSound.Play();
+			}
+
+			if (paddle.DoBallCollision(ball)) paddleSound.Play();
+			paddle.Update(wnd.kbd, wnd.mouse, dt, walls);
+		}
+		else
+		{
+			paddle.Update(wnd.kbd, wnd.mouse, dt, walls);
+			ball.MoveTo(paddle.GetRekt().GetCenter() + Vec2(0.0f, -14.0f));
+			if (wnd.kbd.KeyIsPressed(VK_SPACE) || wnd.mouse.LeftIsPressed())
+			{
+				ball.SetVelocity(Vec2(0.0f, -200.0f));
+				ball.Launch(200.0f);
 			}
 		}
-		if (collided)
-		{
-			paddle.ResetCooldown();
-			bricks[indexOfCollision].DoBallCollision(ball);
-			brickSound.Play();
-		}
-
-		if (paddle.DoBallCollision(ball)) paddleSound.Play();
-		paddle.Update(wnd.kbd, wnd.mouse, dt, walls);
 	}
 }
 
@@ -159,5 +179,54 @@ void Game::ComposeFrame()
 		}
 		ball.Draw(gfx);
 		paddle.Draw(gfx);
+		DrawLives(Vec2(walls.left - 70.0f, Graphics::ScreenHeight - 45.0f), curLives);
 	}
+}
+
+void Game::DrawLives(const Vec2& _topleft, const int _lives)
+{
+	//paddleSmall	= 48x12
+	//x				= 11x10
+	//numbers		= 8x14
+	Color c;
+	if (_lives < 1) c = Colors::Red;
+	else c = Colors::White;
+	SpriteCodex::DrawPaddleSm(_topleft,gfx); //draw at topleft
+	int tempLives = _lives;
+	int numDigits = 0; do { tempLives /= 10; numDigits++; } while (tempLives > 0);
+	const int x = (int)_topleft.x + 24 - ((13 + (10 * numDigits)) / 2);  //draw x-centered on paddle
+	const int y = (int)_topleft.y+22;  //draw under paddle
+	{
+		gfx.PutPixel(0 + x, 0 + y, c);
+		gfx.PutPixel(1 + x, 0 + y, c);
+		gfx.PutPixel(2 + x, 0 + y, c);
+		gfx.PutPixel(3 + x, 0 + y, c);
+		gfx.PutPixel(7 + x, 0 + y, c);
+		gfx.PutPixel(8 + x, 0 + y, c);
+		gfx.PutPixel(9 + x, 0 + y, c);
+		gfx.PutPixel(10 + x, 0 + y, c);
+		gfx.PutPixel(2 + x, 1 + y, c);
+		gfx.PutPixel(8 + x, 1 + y, c);
+		gfx.PutPixel(3 + x, 2 + y, c);
+		gfx.PutPixel(7 + x, 2 + y, c);
+		gfx.PutPixel(4 + x, 3 + y, c);
+		gfx.PutPixel(6 + x, 3 + y, c);
+		gfx.PutPixel(5 + x, 4 + y, c);
+		gfx.PutPixel(4 + x, 5 + y, c);
+		gfx.PutPixel(6 + x, 5 + y, c);
+		gfx.PutPixel(3 + x, 6 + y, c);
+		gfx.PutPixel(7 + x, 6 + y, c);
+		gfx.PutPixel(2 + x, 7 + y, c);
+		gfx.PutPixel(8 + x, 7 + y, c);
+		gfx.PutPixel(0 + x, 8 + y, c);
+		gfx.PutPixel(1 + x, 8 + y, c);
+		gfx.PutPixel(2 + x, 8 + y, c);
+		gfx.PutPixel(3 + x, 8 + y, c);
+		gfx.PutPixel(7 + x, 8 + y, c);
+		gfx.PutPixel(8 + x, 8 + y, c);
+		gfx.PutPixel(9 + x, 8 + y, c);
+		gfx.PutPixel(10 + x, 8 + y, c);
+	}//drawX - 11x10
+	const Vec2(digits) = Vec2((float)x+14.0f, (float)y-4.0f);  //draw to the right of x, centered
+	SpriteCodex::DrawDigits(digits, _lives, c, gfx, true);
 }

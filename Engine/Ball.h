@@ -19,11 +19,16 @@ public:
 	RectF GetRekt() const;
 	Vec2 GetVel() const;
 	void Move(const Vec2& _vec);
+	void MoveTo(const Vec2& _vec);
+	bool IsLaunched() const;
+	void Launch(const float _speed);
+	void Reset();
 
 private:
 	static constexpr float radius = 7.0f;
 	Vec2 pos;
 	Vec2 vel;
 	float speed = 200.0f;
+	bool isLaunched = false;
 };
 
