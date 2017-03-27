@@ -21,6 +21,7 @@ public:
 	void Draw(Graphics& _gfx) const;
 	bool CheckBallCollision(const Ball& _ball) const;
 	void DoBallCollision(Ball& _ball);
+	void DoDamage();
 	RectF GetRekt() const;
 	void Reset();
 
@@ -33,6 +34,7 @@ private:
 	float padX = 1.0f;
 	float padY = 1.0f;
 	float depth = 3.0f;
+	float colorDamageFactor = 0.75f;
 	int hitsToDestroy=1;
 	bool isDestroyed = false;
 };

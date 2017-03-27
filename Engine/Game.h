@@ -61,6 +61,7 @@ private:
 	static constexpr float fieldOffset = (Graphics::ScreenWidth - fieldWidth) / 2.0f;
 	Color borderColor = Color(69, 69, 69);
 	Color colors[6] = {Color(116,133,38), Color(120,31,22), Color(6,34,69), Color(26,103,196), Color(196,33,17), Color(172,172,172) };
+	Brick::Type bTypes[6] = { Brick::Type::Normal, Brick::Type::Normal, Brick::Type::Normal, Brick::Type::Explode, Brick::Type::Strong, Brick::Type::Normal };
 	Brick bricks[gridHeight * gridWidth];
 	Ball ball;
 	FrameTimer ft;

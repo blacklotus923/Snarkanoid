@@ -38,7 +38,7 @@ Game::Game(MainWindow& wnd)
 	{
 		int x = (int)(&b - &bricks[0]) % gridWidth;  //I'm sorry but this is fucking awesome.
 		int y = (int)(&b - &bricks[0]) / gridWidth;  //subtract reference addresses to get the index of the current reference in the array WHAT?!
-		b=Brick(RectF(Vec2(x*bWidth+offsetX, y*bHeight+offsetY), bWidth, bHeight), colors[y%6]);
+		b=Brick(RectF(Vec2(x*bWidth+offsetX, y*bHeight+offsetY), bWidth, bHeight), colors[y%6], bTypes[y % 6]);
 	}
 
 }

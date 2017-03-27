@@ -3,15 +3,16 @@
 #undef min
 #undef max
 
-Brick::Brick(const RectF & _rekt, Color c, Type _type)
+Brick::Brick(const RectF & _rekt, Color color, Type _type)
 	:
 	rekt(_rekt),
-	c(c),
+	c(color),
 	bType(_type)
 {
 	switch (_type)
 	{
 	case Type::Empty:
+		hitsToDestroy = 0;
 		break;
 	case Type::Normal:
 		hitsToDestroy = 1;
@@ -76,6 +77,7 @@ void Brick::DoBallCollision(Ball & _ball)
 	const float bDelta = abs(rekt.bottom - ballRekt.top);
 	const float smallest = std::min(lDelta, std::min(rDelta, std::min(tDelta, bDelta)));
 
+
 	if (smallest == lDelta)  //leftside
 	{
 		_ball.ReboundX();
@@ -100,16 +102,25 @@ void Brick::DoBallCollision(Ball & _ball)
 	{
 	case Type::Normal:
 	case Type::Strong:
-		hitsToDestroy--;
-		break;
 	case Type::Explode:
-		hitsToDestroy--;
+		DoDamage();
 		break;
 	case Type::Empty:
 	case Type::Nobreak:
 	default:
 		break;
 	}
+}
+
+void Brick::DoDamage()
+{
+	hitsToDestroy--;
+	const float r = (float)c.GetR()*colorDamageFactor;
+	const float g = (float)c.GetG()*colorDamageFactor;
+	const float b = (float)c.GetB()*colorDamageFactor;
+	c = Color((int)r, (int)g, (int)b);
+	highlight = Color((int)std::min(r*1.25f, 255.0f), (int)std::min(g*1.25f, 255.0f), (int)std::min(b*1.25f, 255.0f));
+	lowlight = Color((int)(r*0.75f), (int)(g*0.75f), (int)(b*0.75f));
 }
 
 RectF Brick::GetRekt() const
