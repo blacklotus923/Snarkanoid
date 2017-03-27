@@ -33,6 +33,7 @@ private:
 	float padX = 1.0f;
 	float padY = 1.0f;
 	float depth = 3.0f;
+	int hitsToDestroy=1;
 	bool isDestroyed = false;
 };
 

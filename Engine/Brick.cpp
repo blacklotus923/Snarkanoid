@@ -14,14 +14,17 @@ Brick::Brick(const RectF & _rekt, Color c, Type _type)
 	case Type::Empty:
 		break;
 	case Type::Normal:
+		hitsToDestroy = 1;
 		break;
 	case Type::Strong:
+		hitsToDestroy = 2;
 		c = Colors::Gray;
 		break;
 	case Type::Nobreak:
 		c = Colors::Yellow;
 		break;
 	case Type::Explode:
+		hitsToDestroy = 3;
 		c = Colors::Red;
 		break;
 	default:
@@ -39,7 +42,7 @@ void Brick::Draw(Graphics & _gfx) const
 	const RectF brick = rekt.GetExpanded(-padX, -padY);
 	const float width = brick.right - brick.left;
 	const float height = (brick.bottom - brick.top)-1.5f;
-	if (!isDestroyed)
+	if (hitsToDestroy>0)
 	{
 		_gfx.DrawRect(brick.GetExpanded(-depth, -depth), c);
 		for (int y = (int)brick.top; y < (int)brick.bottom; y++)
@@ -61,7 +64,7 @@ void Brick::Draw(Graphics & _gfx) const
 
 bool Brick::CheckBallCollision(const Ball & _ball) const
 {
-	return !isDestroyed && rekt.IsOverlappingWith(_ball.GetRekt());
+	return (hitsToDestroy>0) && rekt.IsOverlappingWith(_ball.GetRekt());
 }
 
 void Brick::DoBallCollision(Ball & _ball)
@@ -93,7 +96,20 @@ void Brick::DoBallCollision(Ball & _ball)
 		_ball.ReboundY();
 		_ball.Move(Vec2(0.0f, rekt.bottom - ballRekt.top));
 	}
-	isDestroyed = true;
+	switch (bType)
+	{
+	case Type::Normal:
+	case Type::Strong:
+		hitsToDestroy--;
+		break;
+	case Type::Explode:
+		hitsToDestroy--;
+		break;
+	case Type::Empty:
+	case Type::Nobreak:
+	default:
+		break;
+	}
 }
 
 RectF Brick::GetRekt() const
