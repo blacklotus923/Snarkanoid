@@ -3,11 +3,30 @@
 #undef min
 #undef max
 
-Brick::Brick(const RectF & _rekt, Color c)
+Brick::Brick(const RectF & _rekt, Color c, Type _type)
 	:
 	rekt(_rekt),
-	c(c)
+	c(c),
+	bType(_type)
 {
+	switch (_type)
+	{
+	case Type::Empty:
+		break;
+	case Type::Normal:
+		break;
+	case Type::Strong:
+		c = Colors::Gray;
+		break;
+	case Type::Nobreak:
+		c = Colors::Yellow;
+		break;
+	case Type::Explode:
+		c = Colors::Red;
+		break;
+	default:
+		break;
+	}
 	const float r = (float)c.GetR();
 	const float g = (float)c.GetG();
 	const float b = (float)c.GetB();
