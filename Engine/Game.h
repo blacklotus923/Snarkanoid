@@ -28,6 +28,8 @@
 #include "Brick.h"
 #include "Paddle.h"
 #include "Sound.h"
+#include "SoundEffect.h"
+#include <random>
 
 class Game
 {
@@ -50,6 +52,7 @@ private:
 	Graphics gfx;
 	/********************************/
 	/*  User Variables              */
+	std::mt19937 rng;
 	static constexpr float bWidth = 40.0f;
 	static constexpr float bHeight = 18.0f;
 	static constexpr int gridWidth = 13;
@@ -67,8 +70,8 @@ private:
 	FrameTimer ft;
 	RectF walls;
 	Paddle paddle;
-	Sound paddleSound;
-	Sound brickSound;
+	SoundEffect paddleSound = SoundEffect{ L"Sounds\\pad2.wav" };
+	SoundEffect brickSound = SoundEffect{ L"Sounds\\brick2.wav" };
 	Sound music;
 	Sound gameOverSound;
 	bool musicIsPlaying = false;

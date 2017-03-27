@@ -68,7 +68,7 @@ bool Brick::CheckBallCollision(const Ball & _ball) const
 	return (hitsToDestroy>0) && rekt.IsOverlappingWith(_ball.GetRekt());
 }
 
-void Brick::DoBallCollision(Ball & _ball)
+Brick::Type Brick::DoBallCollision(Ball & _ball)
 {
 	const RectF ballRekt = _ball.GetRekt();
 	const float lDelta = abs(rekt.left - ballRekt.right);
@@ -110,6 +110,8 @@ void Brick::DoBallCollision(Ball & _ball)
 	default:
 		break;
 	}
+
+	return bType;
 }
 
 void Brick::DoDamage()
@@ -121,6 +123,7 @@ void Brick::DoDamage()
 	c = Color((int)r, (int)g, (int)b);
 	highlight = Color((int)std::min(r*1.25f, 255.0f), (int)std::min(g*1.25f, 255.0f), (int)std::min(b*1.25f, 255.0f));
 	lowlight = Color((int)(r*0.75f), (int)(g*0.75f), (int)(b*0.75f));
+	if (bType == Type::Explode && hitsToDestroy <= 0) bType = Type::Exploded;
 }
 
 RectF Brick::GetRekt() const

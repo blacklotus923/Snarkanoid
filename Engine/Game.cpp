@@ -26,11 +26,10 @@ Game::Game(MainWindow& wnd)
 	:
 	wnd(wnd),
 	gfx(wnd),
+	rng(std::random_device()()),
 	walls(fieldOffset, fieldWidth+fieldOffset, (float)Graphics::ScreenHeight, border),
 	ball(Vec2(402.5f,300.0f), Vec2(0.0f,0.0f)),
 	paddle(Vec2((float)Graphics::ScreenWidth/2,(float) Graphics::ScreenHeight-75),44.0f,8.0f),
-	paddleSound(L"Sounds\\pad2.wav"),
-	brickSound(L"Sounds\\brick2.wav"),
 	gameOverSound(L"Sounds\\gameover.wav"),
 	music(L"Sounds\\bgmusic.wav",0.11f,108.05f)
 {
@@ -118,11 +117,29 @@ void Game::UpdateModel(float dt)
 			if (collided)
 			{
 				paddle.ResetCooldown();
-				bricks[indexOfCollision].DoBallCollision(ball);
-				brickSound.Play();
+				Brick::Type bType = bricks[indexOfCollision].DoBallCollision(ball);
+				switch (bType)
+				{
+				case Brick::Type::Normal:
+					brickSound.Play(rng);
+					break;
+				case Brick::Type::Strong:
+					brickSound.Play(rng);
+					break;
+				case Brick::Type::Explode:
+					brickSound.Play(rng);
+					break;
+				case Brick::Type::Exploded:
+					brickSound.Play(rng);
+					break;
+				case Brick::Type::Empty:
+				case Brick::Type::Nobreak:
+				default:
+					break;
+				}
 			}
 
-			if (paddle.DoBallCollision(ball)) paddleSound.Play();
+			if (paddle.DoBallCollision(ball)) paddleSound.Play(rng);
 			paddle.Update(wnd.kbd, wnd.mouse, dt, walls);
 		}
 		else

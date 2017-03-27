@@ -13,14 +13,15 @@ public:
 		Normal,
 		Strong,
 		Nobreak,
-		Explode
+		Explode,
+		Exploded
 	};
 public:
 	Brick() = default;
 	Brick(const RectF& _rekt, Color c = Colors::Gray, Type _type = Type::Normal);
 	void Draw(Graphics& _gfx) const;
 	bool CheckBallCollision(const Ball& _ball) const;
-	void DoBallCollision(Ball& _ball);
+	Type DoBallCollision(Ball& _ball);
 	void DoDamage();
 	RectF GetRekt() const;
 	void Reset();
