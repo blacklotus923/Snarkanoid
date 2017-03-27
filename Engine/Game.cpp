@@ -121,25 +121,27 @@ void Game::UpdateModel(float dt)
 				switch (bType)
 				{
 				case Brick::Type::Normal:
-					brickSound.Play(rng);
+					sfxBrickNormal.Play(rng);
 					break;
 				case Brick::Type::Strong:
-					brickSound.Play(rng);
+					sfxBrickStrong.Play(rng);
+					break;
+				case Brick::Type::Nobreak:
+					sfxBrickNobreak.Play(rng);
 					break;
 				case Brick::Type::Explode:
-					brickSound.Play(rng);
+					sfxBrickNormal.Play(rng);
 					break;
 				case Brick::Type::Exploded:
-					brickSound.Play(rng);
+					sfxBrickExploded.Play(rng);
 					break;
 				case Brick::Type::Empty:
-				case Brick::Type::Nobreak:
 				default:
 					break;
 				}
 			}
 
-			if (paddle.DoBallCollision(ball)) paddleSound.Play(rng);
+			if (paddle.DoBallCollision(ball)) sfxPaddle.Play(rng);
 			paddle.Update(wnd.kbd, wnd.mouse, dt, walls);
 		}
 		else

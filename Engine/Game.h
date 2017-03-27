@@ -70,8 +70,11 @@ private:
 	FrameTimer ft;
 	RectF walls;
 	Paddle paddle;
-	SoundEffect paddleSound = SoundEffect{ L"Sounds\\pad2.wav" };
-	SoundEffect brickSound = SoundEffect{ L"Sounds\\brick2.wav" };
+	SoundEffect sfxPaddle = SoundEffect{ {L"Sounds\\pad2.wav"}, false, 0.12f };
+	SoundEffect sfxBrickNormal = SoundEffect{ {L"Sounds\\brick2.wav"}, false, 0.12f };
+	SoundEffect sfxBrickStrong = SoundEffect{ {L"Sounds\\strong.wav"}, false, 0.22f };
+	SoundEffect sfxBrickNobreak = SoundEffect{ {L"Sounds\\nobreak.wav"}, false, 0.22f };
+	SoundEffect sfxBrickExploded = SoundEffect{ {L"Sounds\\exploded.wav"}, false, 0.12f };
 	Sound music;
 	Sound gameOverSound;
 	bool musicIsPlaying = false;
