@@ -126,6 +126,11 @@ void Brick::DoDamage()
 	if (bType == Type::Explode && hitsToDestroy <= 0) bType = Type::Exploded;
 }
 
+void Brick::Explode()
+{
+	hitsToDestroy = 0;
+}
+
 RectF Brick::GetRekt() const
 {
 	return rekt;

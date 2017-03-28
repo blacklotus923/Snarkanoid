@@ -31,7 +31,7 @@ Game::Game(MainWindow& wnd)
 	ball(Vec2(402.5f,300.0f), Vec2(0.0f,0.0f)),
 	paddle(Vec2((float)Graphics::ScreenWidth/2,(float) Graphics::ScreenHeight-75),44.0f,8.0f),
 	gameOverSound(L"Sounds\\gameover.wav"),
-	music(L"Sounds\\bgmusic.wav",0.11f,108.05f)
+	music(L"Sounds\\bgmusic.wav",0.05f,108.05f)
 {
 	for (Brick& b : bricks)
 	{
@@ -133,7 +133,22 @@ void Game::UpdateModel(float dt)
 					sfxBrickNormal.Play(rng);
 					break;
 				case Brick::Type::Exploded:
+				{
+					int x = indexOfCollision % gridWidth;
+					int y = indexOfCollision / gridWidth;
+					for (int iy = y - 1; iy <= y + 1; ++iy)
+					{
+						for(int ix = x - 1;ix <= x + 1; ++ix)
+						{
+							if (x >= 0 && x <= gridWidth
+								&& y >= 0 && y <= gridHeight)
+							{
+								bricks[iy*gridWidth + ix].Explode();
+							}
+						}
+					}
 					sfxBrickExploded.Play(rng);
+				}
 					break;
 				case Brick::Type::Empty:
 				default:

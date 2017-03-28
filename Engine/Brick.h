@@ -23,6 +23,7 @@ public:
 	bool CheckBallCollision(const Ball& _ball) const;
 	Type DoBallCollision(Ball& _ball);
 	void DoDamage();
+	void Explode();
 	RectF GetRekt() const;
 	void Reset();
 
